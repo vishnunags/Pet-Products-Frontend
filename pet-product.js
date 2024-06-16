@@ -3,6 +3,11 @@ let cart = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
+    // Fetch and display cart items if on the cart page
+    if (document.URL.includes('cart.html')) {
+        fetchAndDisplayCartItems();
+        document.getElementById('checkout-btn').addEventListener('click', proceedToCheckout);
+    }
 });
 
 async function fetchProducts() {
@@ -95,37 +100,7 @@ function decrementQuantity(productId) {
     }
 }
 
-// Example function to fetch and display cart items on cart.html
 function fetchAndDisplayCartItems() {
-    // Implement fetching and displaying cart items logic here
-    // This could involve fetching data from a backend or using local storage
-    // Example:
-    const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-    if (cartItems) {
-        // Display cart items on the cart.html page
-        console.log('Cart items:', cartItems);
-        // Example: display items in a list on cart.html
-        const cartList = document.getElementById('cart-items');
-        cartList.innerHTML = '';
-        cartItems.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = `${item.name} - Quantity: ${item.quantity}`;
-            cartList.appendChild(li);
-        });
-    } else {
-        console.log('Cart is empty');
-    }
-}
-
-// Call fetchAndDisplayCartItems() when the cart page loads
-if (document.URL.includes('cart.html')) {
-    document.addEventListener('DOMContentLoaded', fetchAndDisplayCartItems);
-}
-
-// Example function to fetch and display cart items on cart.html
-function fetchAndDisplayCartItems() {
-    // Implement fetching and displaying cart items logic here
-    // This could involve fetching data from a backend or using local storage
     const cartItems = JSON.parse(localStorage.getItem('cartItems'));
     const totalAmount = calculateTotal(cartItems);
 
@@ -146,7 +121,6 @@ function fetchAndDisplayCartItems() {
     }
 }
 
-// Example function to calculate total amount
 function calculateTotal(cartItems) {
     let total = 0;
     cartItems.forEach(item => {
@@ -155,7 +129,45 @@ function calculateTotal(cartItems) {
     return total;
 }
 
-// Call fetchAndDisplayCartItems() when the cart page loads
-if (document.URL.includes('cart.html')) {
-    document.addEventListener('DOMContentLoaded', fetchAndDisplayCartItems);
+async function proceedToCheckout() {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    if (!cartItems || cartItems.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+
+    const totalAmount = calculateTotal(cartItems);
+    const checkoutData = {
+        totalAmount: totalAmount,
+        items: cartItems.map(item => ({
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price
+        }))
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/api/order/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(checkoutData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Checkout failed');
+        }
+
+        const result = await response.json();
+        alert('Checkout successful!');
+        console.log(result);
+
+        // Clear cart after successful checkout
+        localStorage.removeItem('cartItems');
+        fetchAndDisplayCartItems();
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('There was an issue with your checkout. Please try again.');
+    }
 }
