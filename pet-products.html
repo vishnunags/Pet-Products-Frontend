@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Products Store</title>
+    <link rel="stylesheet" href="pet-products.css">
+</head>
+<body>
+    <header>
+        <h1>Pet Products Store</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="cart.html">Cart</a></li> <!-- Link to cart page -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="products">
+            <!-- Products will be dynamically added here -->
+        </section>
+        <div class="add-product">
+            <button onclick="location.href='add-product.html'">Add New Product</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Pet Products Store</p>
+    </footer>
+
+    <button id="checkout-btn" onclick="location.href='cart.html'">Checkout</button> <!-- Link to cart page -->
+    
+    <script src="pet-product.js"></script>
+</body>
+</html>

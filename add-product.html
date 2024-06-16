@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Product</title>
+    <link rel="stylesheet" href="pet-products.css">
+</head>
+<body>
+    <header>
+        <h1>Add New Product</h1>
+    </header>
+
+    <main>
+        <form id="add-product-form">
+            <div>
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" name="name" required>
+            </div>
+            <div>
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" name="price" step="0.01" required>
+            </div>
+            <div>
+                <label for="product-description">Description:</label>
+                <textarea id="product-description" name="description" required></textarea>
+            </div>
+            <div>
+                <label for="product-image">Image URL:</label>
+                <input type="url" id="product-image" name="image_url" required>
+            </div>
+            <button type="submit">Add Product</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Pet Products Store</p>
+    </footer>
+
+    <script src="add-product.js"></script>
+</body>
+</html>
