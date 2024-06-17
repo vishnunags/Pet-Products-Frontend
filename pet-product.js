@@ -160,12 +160,20 @@ async function proceedToCheckout() {
         }
 
         const result = await response.json();
-        alert('Checkout successful!');
-        console.log(result);
+
+        // Save order details to local storage
+        const orderDetails = {
+            orderId: result.orderId, // Assuming the server returns an order ID
+            totalAmount: totalAmount,
+            items: cartItems
+        };
+        localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
 
         // Clear cart after successful checkout
         localStorage.removeItem('cartItems');
-        fetchAndDisplayCartItems();
+
+        // Redirect to order confirmation page
+        window.location.href = 'order-confirmation.html';
     } catch (error) {
         console.error('Error during checkout:', error);
         alert('There was an issue with your checkout. Please try again.');
