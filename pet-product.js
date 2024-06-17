@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchProducts() {
     try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch(APIURL+'/api/products');
         if (!response.ok) {
             throw new Error('Failed to fetch products');
         }
@@ -147,7 +147,7 @@ async function proceedToCheckout() {
     };
 
     try {
-        const response = await fetch('http://localhost:3000/api/order/checkout', {
+        const response = await fetch(APIURL+'/api/order/checkout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

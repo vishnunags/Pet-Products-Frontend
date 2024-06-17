@@ -7,7 +7,7 @@ document.getElementById('add-product-form').addEventListener('submit', async (ev
     const imageUrl = document.getElementById('product-image').value;
 
     try {
-        const response = await fetch('http://localhost:3000/api/products', {
+        const response = await fetch(APIURL+'/api/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
