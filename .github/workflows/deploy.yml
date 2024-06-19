@@ -1,0 +1,37 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Ensure local directory exists
+        run: mkdir -p pet-project/Pet-Products-Frontend
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.PROJECT_SECRET }}
+
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Pull latest changes from master
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-208-198-41.compute-1.amazonaws.com 'cd /home/ec2-user/pet-project/Pet-Products-Frontend && git pull origin master'
+
+      - name: Install dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-208-198-41.compute-1.amazonaws.com 'cd /home/ec2-user/pet-project/Pet-Products-Frontend && sudo npm install -g http-server && sudo npm install -g pm2 && ln -s pet-products.html index.html'
+
+      - name: Restart PM2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-208-198-41.compute-1.amazonaws.com 'cd /home/ec2-user/pet-project/Pet-Products-Frontend && pm2 restart http-server --name pet-products -- -p 8080'
